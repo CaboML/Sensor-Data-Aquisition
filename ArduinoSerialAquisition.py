@@ -12,8 +12,12 @@ def DataAquisition(AquisitionTime, file):
 
     file = open(file, 'w+')
 
+    Arduino_Data = serial.Serial('/dev/cu.usbmodem14341', 115200)
 
-    Arduino_Data.write(bytes(1)) #begin arduino communication
+    Arduino_Data.flushInput()
+
+    Arduino_Data.write(bytes(1))  # begin arduino communication
+
     start = time.time()
     end_time = 0
 

@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from ADXL345Dataaquisition import DataAquisition
+from ArduinoSerialAquisition import DataAquisition
 
 class DisplayData:
 
