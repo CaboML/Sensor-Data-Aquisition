@@ -90,6 +90,8 @@ class DisplayData:
         plt.show()
         return
 
+    
+
     def PSD(self):
         fig = plt.figure(1)
         fig.suptitle('PSD DashBoard', fontsize=14, fontweight='bold')
