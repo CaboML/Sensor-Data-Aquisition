@@ -49,5 +49,3 @@ def DataAquisition(AquisitionTime, file):
         Arduino_Data.close()
         file.close()
     return
-
-#DataAquisition(5, 'teste.txt')

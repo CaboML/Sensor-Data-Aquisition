@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from ArduinoSerialAquisition import DataAquisition
+from PeakDetection import PeakDetection
+from scipy import signal
 
 class DisplayData:
 
-    def __init__(self,x):
+    def __init__(self, x):
         self.file_name = x  # Class variable. File with the data
 
 
@@ -45,7 +47,7 @@ class DisplayData:
         return self.total_acquisition, self.sec, self.Vib, self.freq
 
     def AccelerationData(self):  #Method to display data retrieved from Arduino
-
+        #plt.ion()
         fig = plt.figure(1)
         fig.suptitle('Acceleration DashBoard' + ' ' + self.file_name, fontsize=14, fontweight='bold')
 
@@ -60,6 +62,10 @@ class DisplayData:
         Vx.set_ylabel('acceleration [mg]')
 
         plt.show()
+
+        # teste = PeakDetection(self.sec, self.Vib)
+        # teste.PeakDetection()
+
         return
 
     def fft(self, t_init, t_end):  # Create fft using a start and end time
@@ -86,8 +92,15 @@ class DisplayData:
         #Vx_fft.plot(fft_freq, 2.0/np.size(self.Vib) * np.abs(fft_vx.real))
         xf = np.linspace(0.0, 1.0 / (2.0 * (1/self.freq)), np.size(self.Vib)/2)
         yf = np.fft.fft(self.Vib)
+
         Vx_fft.plot(xf, (2.0/np.size(self.Vib)) * np.abs(yf[0:np.int(np.size(self.Vib)/2)]))
+
+
         plt.show()
+
+        teste = PeakDetection(xf, (2.0/np.size(self.Vib)) * np.abs(yf[0:np.int(np.size(self.Vib)/2)]) )
+        teste.PeakDetection()
+
         return
 
     def PSD(self):
@@ -95,9 +108,17 @@ class DisplayData:
         fig.suptitle('PSD DashBoard', fontsize=14, fontweight='bold')
         V_PSD = fig.add_subplot(1, 1, 1)
 
-        V_PSD.psd(self.Vib, NFFT=int(np.size(self.Vib)/100), Fs=self.freq)
+        f, Pxx_den = signal.welch(self.Vib, self.freq, nperseg=int(np.size(self.Vib)/10))
+        V_PSD.semilogy(f, Pxx_den)
+
         plt.show()
+
+        teste = PeakDetection(f, Pxx_den)
+        teste.PeakDetection()
+
+
         return
+
 
 
 try:
@@ -115,7 +136,7 @@ try:
     #Use modes configurations
     if useMode == 1:
 
-        file = input('Please insert the data file name') + '.txt'
+        file = input('Please insert the data file name')
         print(file)
         data = DisplayData(file)
         data.DataPreparation()
@@ -146,5 +167,9 @@ try:
 
 
 
+
 except KeyboardInterrupt:
     plt.close('all')
+
+#Next improvments
+#peak detection values
