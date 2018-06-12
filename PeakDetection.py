@@ -17,9 +17,6 @@ class PeakDetection:
 
     def PeakDetection_prep(self):
 
-        yThr = int(input('Please insert the desired yThreshold: '))
-        xThr = int(input('Please insert the desired xThreshold: '))
-
         # Calculate all relative max
 
         Max_yValues = []
@@ -36,9 +33,8 @@ class PeakDetection:
 
             #Groups of 3 values. Comparison between the meeddle value and the side values
             if Analysis_yValues[0] <= Analysis_yValues[1] >= Analysis_yValues[2]:
-                if Analysis_yValues[1] > yThr:
-                    Max_yValues.append(Analysis_yValues[1])
-                    Max_xValues.append(self.xValues[j+1])
+                Max_yValues.append(Analysis_yValues[1])
+                Max_xValues.append(self.xValues[j+1])
 
             Analysis_yValues = []
             j = j + 1
@@ -49,12 +45,43 @@ class PeakDetection:
         Final_yValues.append(Max_yValues[0])
         while k < np.size(Max_xValues):
 
-            if (Max_xValues[k] - Final_xValues[-1]) > xThr:
-                Final_xValues.append(Max_xValues[k])
-                Final_yValues.append(Max_yValues[k])
+            Final_xValues.append(Max_xValues[k])
+            Final_yValues.append(Max_yValues[k])
 
             k += 1
         return Final_xValues, Final_yValues
+
+    ### THRESHOLD CODE ####
+    # yThr = int(input('Please insert the desired yThreshold: '))
+    #     xThr = int(input('Please insert the desired xThreshold: '))
+
+
+# if Analysis_yValues[0] <= Analysis_yValues[1] >= Analysis_yValues[2]:
+#     if Analysis_yValues[1] > yThr:
+#         Max_yValues.append(Analysis_yValues[1])
+#         Max_xValues.append(self.xValues[j + 1])
+#         # x Axis threshold condition
+#         k = 1
+#         Final_xValues.append(Max_xValues[0])
+#         Final_yValues.append(Max_yValues[0])
+#         while k < np.size(Max_xValues):
+#
+#             if (Max_xValues[k] - Final_xValues[-1]) > xThr:
+#                 Final_xValues.append(Max_xValues[k])
+#                 Final_yValues.append(Max_yValues[k])
+#
+#             k += 1
+#
+    def Peak_stats(self):
+        Final_xValues, Final_yValues = self.PeakDetection_prep()
+        Peaks_mean = np.mean(Final_yValues)
+        for i in range(np.size(Final_xValues) - 1):
+            Avg_peak_time = np.mean(Final_xValues[i+1]-Final_xValues[i])
+        print(Peaks_mean)
+        print(Avg_peak_time)
+
+        return Peaks_mean, Avg_peak_time
+
 
     def PeakDetection_Disp(self):
         Final_xValues, Final_yValues = self.PeakDetection_prep()
@@ -82,6 +109,7 @@ def main():
 
     teste.Display_Vib()
     teste.PeakDetection_Disp()
+    teste.Peak_stats()
 
 if __name__ == '__main__':
     main()

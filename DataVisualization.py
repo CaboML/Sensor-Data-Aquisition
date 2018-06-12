@@ -113,16 +113,12 @@ class DisplayData:
 
         f, Pxx_den = signal.welch(vib, freq, nperseg=int(np.size(vib)/5))
 
+        Peaks = PeakDetection(f, Pxx_den)
+        Max_x, Max_y = Peaks.PeakDetection_prep()
+
         return f, Pxx_den
 
-    # def Peak_Distance(self):
-    #     PeakDistance = PeakDetection(self.f, self.Pxx_den)
-    #     Max_x, Max_y = PeakDistance.PeakDetection_prep()
-    #     Distance_Value = []
-    #
-    #     for i in range(np.size(Max_y) - 1):
-    #         Distance_Value.append(Max_y[i+1] - Max_y[i])
-    #     print(Distance_Value)
+
 
     def PSD(self, other):
 
@@ -138,6 +134,9 @@ class DisplayData:
             print(i)
             f, Pxx = self.PSD_prep(int(ti), int(to), i)
             V_PSD.semilogy(f, Pxx)
+
+            i = PeakDetection(f, Pxx)
+            Max_x, Max_y = i.PeakDetection_prep()
 
         plt.show()
 
@@ -189,22 +188,13 @@ def main():
                 data.PSD(file_names)
 
 
+
         else:
             Time = input("Insert the measurement time [s]")
             Time = int(Time)
             file = input('Please insert the data file name') + '.txt'
             print(file)
             DataAquisition(Time, file)
-
-            data = DisplayData(file)
-            data.DataPreparation()
-            data.AccelerationData()
-
-            print('Introduza o tempo opara a fft')
-            ti = input('Insert FFT start time [s]:')  # manually insert the fft start time for analysis
-            to = input('Insert FFT end time [s]:')  # manually insert the fft end time for analysis
-            data.fft(float(ti), float(to))
-            data.PSD(float(ti), float(to))
 
     except KeyboardInterrupt:
         plt.close('all')
