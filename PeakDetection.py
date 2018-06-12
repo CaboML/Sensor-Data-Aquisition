@@ -7,9 +7,15 @@ class PeakDetection:
         self.yValues = yValues
         self.xValues = xValues
 
-    def PeakDetection(self):
-        #Display raw data
-        #plt.ion()
+    def Display_Vib(self):
+        fig = plt.figure()
+        fig.suptitle("Graph title", fontsize=14, fontweight='bold')
+        Graph2 = fig.add_subplot(1, 1, 1)
+        Graph2.plot(self.xValues, self.yValues)
+
+        plt.show()
+
+    def PeakDetection_prep(self):
 
         yThr = int(input('Please insert the desired yThreshold: '))
         xThr = int(input('Please insert the desired xThreshold: '))
@@ -37,9 +43,7 @@ class PeakDetection:
             Analysis_yValues = []
             j = j + 1
 
-        #print("Os máximos são")
-        #print(Max_xValues, Max_yValues)
-
+        #x Axis threshold condition
         k = 1
         Final_xValues.append(Max_xValues[0])
         Final_yValues.append(Max_yValues[0])
@@ -50,34 +54,35 @@ class PeakDetection:
                 Final_yValues.append(Max_yValues[k])
 
             k += 1
+        return Final_xValues, Final_yValues
 
-        #print('Os máximos com threshold de tempo são:')
-        #print(Final_xValues, Final_yValues)
-
+    def PeakDetection_Disp(self):
+        Final_xValues, Final_yValues = self.PeakDetection_prep()
 
         fig = plt.figure()
         fig.suptitle("Graph title", fontsize=14, fontweight='bold')
         Graph = fig.add_subplot(1, 1, 1)
-        Graph.plot(self.xValues, self.yValues)
-
+        Graph.plot(self.xValues,self.yValues)
         Graph.scatter(Final_xValues, Final_yValues, marker="v", color="b")
 
         for i in range(np.size(Final_yValues)):
             Values = '[' + str(round(Final_xValues[i])) + ',' + str(round(Final_yValues[i])) + ']'
-
             Graph.annotate(Values, xy=(Final_xValues[i], Final_yValues[i]))
+
+        Graph.scatter(Final_xValues, Final_yValues, marker="v", color="b")
 
         plt.show()
 
-        return Final_xValues, Final_yValues
 
-        # Check if the max obey to yThreshold condition
-        # Check if max obey xThreshold condition
+data = [25.23, 8.23, 15.567678, 5.234, 6, 10, 10, 3, 1, 20, 7]
+sec =  [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
 
+def main():
+    teste = PeakDetection(sec, data)
 
-# data = [25.23, 8.23, 15.567678, 5.234, 6, 10, 10, 3, 1, 20, 7]
-# sec =  [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
-#
-# teste = PeakDetection(sec, data)
-# teste.PeakDetection()
+    teste.Display_Vib()
+    teste.PeakDetection_Disp()
+
+if __name__ == '__main__':
+    main()
 
