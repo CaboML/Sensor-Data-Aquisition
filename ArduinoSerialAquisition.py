@@ -48,4 +48,5 @@ def DataAquisition(AquisitionTime, file):
     except KeyboardInterrupt:
         Arduino_Data.close()
         file.close()
-    return
+
+    return file

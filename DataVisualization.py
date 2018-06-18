@@ -8,14 +8,27 @@ from PeakDetection import PeakDetection             # Peak detection class
 from scipy import signal
 
 class DisplayData:
+"""
+All parameters are userInput
 
-    # def __init__(self, x):
-    #     self.file_name = x  # Class variable. File with the data
+Prepares acelerometer data to be displayed
 
+Calculates FFt and PSD from signal.
+
+Opens data from txt file using comma separated values
+"""
     def DataPreparation(self, file_name):
+        """
+
+        :param self:
+        :param file_name: Data file from UserImput
+        :return: Aquisition sample time, columns o time as sec, column of vibration time, acquisiton freqtime
+
+        """
         sec = []  # List with time values
         Vib = []  # List with acceleration Data
 
+        #open txt file
         try:
             print(file_name)
             file2 = pd.read_csv(file_name + '.txt')
@@ -27,6 +40,7 @@ class DisplayData:
         # Set Data Columns
         sec = file2.iloc[:, 0]  # set time column
         Vib = file2.iloc[:, 1]  # set Acceleration column
+
 
         sec_max = np.max(sec)  # Define maximum sampling time
         sec_min = np.min(sec)  # Define minimum sampling time
@@ -42,6 +56,11 @@ class DisplayData:
         return total_acquisition, sec, Vib, freq
 
     def AccelerationData(self, other):  #Method to display data retrieved from Arduino
+        """
+        :param self:
+        :param other: Data to show
+        :return: A plot
+        """
 
         fig = plt.figure(1)
         fig.suptitle('Acceleration DashBoard', fontsize=14, fontweight='bold')
@@ -50,13 +69,16 @@ class DisplayData:
 
         plt.grid(True)  # Turn the grid on
 
-        plt.ylabel('Vib_z')  # Set ylabels
+        plt.ylabel('mg')  # Set ylabels
 
         #Parameters calculation for all graphs
         for i in other:
             print(i)
             total_aquisition, sec, vib, freq = self.DataPreparation(i)
             Vx.plot(sec, vib)
+
+        Vx.legend(other)
+
 
         Vx.set_title('Z Acceleration')
         Vx.set_xlabel('Time [ms]')
@@ -66,7 +88,18 @@ class DisplayData:
 
         return
 
-    def fft_prep(self, t_init, t_end, file_name):  # Create fft using a start and end time
+    #method to retrive the fft results
+    def fft_prep(self, t_init, t_end, file_name):
+        """
+
+        :param self:
+        :param t_init: initial window time
+        :param t_end:  end window time
+        :param file_name: Base file to calculate fft
+        :return:
+            xf: frequency values from FFT
+            real_yf: FFT values
+        """
         total_aquisition, sec, vib, freq = self.DataPreparation(file_name)
 
         vec_init = int(round(freq * t_init, 1))
@@ -80,7 +113,13 @@ class DisplayData:
 
         return xf, real_yf
 
+    # method to display fft
     def fft(self, other):  # Create fft using a start and end time
+        """
+        :param self:
+        :param other: Files to compute FFT. Files selected by userInput
+        :return: FFT plot
+        """
 
         # print(freq)
         fig = plt.figure()
@@ -98,11 +137,22 @@ class DisplayData:
             xf, real_yf = self.fft_prep(int(ti), int(to), i)
             Vx_fft.plot(xf, real_yf)
 
+        Vx_fft.legend(other)
         plt.show()
 
         return
 
     def PSD_prep(self, t_init, t_end, file_name):
+        """
+
+        :param self:
+        :param t_init: initial window time
+        :param t_end:  end window time
+        :param file_name: File to comput PSD values
+        :return:
+            f: frequency values
+            Pxx_den: PSD values
+        """
 
         total_aquisition, sec, vib, freq = self.DataPreparation(file_name)
 
@@ -137,6 +187,8 @@ class DisplayData:
 
             i = PeakDetection(f, Pxx)
             Max_x, Max_y = i.PeakDetection_prep()
+
+        V_PSD.legend(other)
 
         plt.show()
 
@@ -186,8 +238,6 @@ def main():
 
             if graph_type == 'PSD':
                 data.PSD(file_names)
-
-
 
         else:
             Time = input("Insert the measurement time [s]")
