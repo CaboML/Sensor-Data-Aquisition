@@ -1,6 +1,6 @@
 # Sensor-Data-Aquisition
 The technologies used were:
-  1. A arduino uno with an ADXL345 analog acelerometer. 
+  1. A arduino uno @1kHz with an ADXL345 analog acelerometer (range up to 3.2kHz) . 
   2. Python code to control the data collection from arduino, python packages to calculate de ffts and PSDs. 
   3. Also used python to build a near real time dashboards.
 
