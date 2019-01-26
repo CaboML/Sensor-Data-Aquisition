@@ -1,5 +1,5 @@
 # Sensor-Data-Aquisition
-This repo is build on three main features:
+This repo is build on two main features:
 
 ### 1. Vibration data collection from arduino 
 In the below picture you can see some of the results. You can seen the comparison of the vibration of four eletric screwdrivers. 
