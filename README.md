@@ -1,4 +1,9 @@
 # Sensor-Data-Aquisition
+The technologies used were:
+  1. A arduino uno with an ADXL345 analog acelerometer. 
+  2. Python code to control the data collection from arduino, python packages to calculate de ffts and PSDs. 
+  3. Also used python to build a near real time dashboards.
+
 This repo is build on two main features:
 
 ### 1. Vibration data collection from arduino 
