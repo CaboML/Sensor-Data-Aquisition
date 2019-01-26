@@ -9,3 +9,7 @@ In the below picture you can see some of the results. You can seen the compariso
 ### 2. Vibration data analysis using python
 
 ![amp](https://user-images.githubusercontent.com/38300412/51787936-76385300-216f-11e9-8959-a5f77f787e2c.png)
+
+#### fft analysis also in python
+
+![fft](https://user-images.githubusercontent.com/38300412/51787941-7df7f780-216f-11e9-8ec4-370743df2c57.png)
